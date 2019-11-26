@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="fetchAccountsWithBillingCityFlow" doc:id="6aae1bea-f07b-4721-9949-82ddbc054cb3" >
+		<logger level="INFO" doc:name="Logger" doc:id="456bf9fb-d303-40b5-a70e-0b60c62773e0" message="Input value from the url #[vars.billingCityVar]"/>
+		<salesforce:query doc:name="Query" doc:id="b6cf0870-d087-4e60-9521-e119872aae50" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query>SELECT Name,BillingCountry,BillingCity,BillingState,BillingStreet,BillingPostalCode from Account where BillingCity=':billingCityParam'</salesforce:salesforce-query>
+			<salesforce:parameters><![CDATA[#[output application/java
+---
+{
+	billingCityParam : vars.billingCityVar
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="Transform Message" doc:id="b64af180-860d-42a4-8ae6-d3c45f652d12" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b1af77b4-e5ba-4375-b0d2-e7ffb2755161" message="In the logger after the final transformation #[payload]"/>
+	</flow>
+</mule>

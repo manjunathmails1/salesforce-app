@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<flow name="fetchAccountsFlow" doc:id="790aa03b-44cb-426e-aae2-935869f4abc4" >
+		<logger level="INFO" doc:name="Logger" doc:id="29582645-1608-4a4f-8565-e3a55d5d77a8" message="In the entry log of fetching all the accounts"/>
+		<salesforce:query-all doc:name="Query all" doc:id="78f8dca5-758c-4b2b-9e65-90091c774915" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query >SELECT Name,BillingCountry,BillingCity,BillingState,BillingStreet,BillingPostalCode from Account</salesforce:salesforce-query>
+		</salesforce:query-all>
+		<ee:transform doc:name="Transform Message" doc:id="3102e92d-eca8-44a6-b6d8-a2929c8b0daa" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2859b346-3047-4d52-8b1b-477b88f38996" message="In the logger after transform message #[payload]"/>
+	</flow>
+
+</mule>

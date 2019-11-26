@@ -1,0 +1,81 @@
+#%RAML 1.0
+title: SalesForce-CRUD-Design-API
+description: This API will invoke the CRUD operations in SalesForce
+baseUri: http://localhost:8081/salesforce
+
+/fetchAccountsWithBillingCity:
+  get:
+    queryParameters:
+      billingCity:
+        displayName: billingCity
+        required: true
+        type: string
+        example: "Chicago"
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+                {
+                  "BillingCountry": "USA",
+                  "BillingCity": "Chicago",
+                  "BillingStreet": "312 Constitution Place\nAustin, TX 78767\nUSA",
+                  "BillingPostalCode": 515110,
+                  "Id": 1234,
+                  "type": "Account",
+                  "BillingState": "TX",
+                  "Name": "Edge Communications"
+                }
+      404:
+        body:
+          application/json:
+            example:
+              {
+                "status" : 404,
+                "message" : "No data found"
+              } 
+
+      500:
+        body:
+          application/json:
+            example:
+              {
+                "status" : 500,
+                "message" : "Internal server error"
+              }
+
+
+/fetchAccounts:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+                {
+                  "BillingCountry": "USA",
+                  "BillingCity": "Chicago",
+                  "BillingStreet": "312 Constitution Place\nAustin, TX 78767\nUSA",
+                  "BillingPostalCode": 515110,
+                  "Id": 1234,
+                  "type": "Account",
+                  "BillingState": "TX",
+                  "Name": "Edge Communications"
+                }
+      404:
+        body:
+          application/json:
+            example:
+              {
+                "status" : 404,
+                "message" : "No data found"
+              } 
+
+      500:
+        body:
+          application/json:
+            example:
+              {
+                "status" : 500,
+                "message" : "Internal server error"
+              }
